@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+// 注意：移除了 'import fetch from 'node-fetch';' 这一行
 
 // 从 Vercel 环境变量中读取 Token
 const ALAPI_TOKEN = process.env.ALAPI_TOKEN;
@@ -14,6 +14,10 @@ export default async function handler(req, res) {
     }
 
     try {
+        // *** 核心修改：使用动态 import() 导入 node-fetch ***
+        const { default: fetch } = await import('node-fetch');
+        // *** node-fetch 变量现在可以使用了 ***
+
         // 1. 在服务器端调用外部 API
         const response = await fetch(`${API_URL}?token=${ALAPI_TOKEN}&format=json`);
         const data = await response.json();
