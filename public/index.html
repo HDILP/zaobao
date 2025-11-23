@@ -7,45 +7,40 @@
     <style>
         :root {
             --primary-color: #d93025;
-            --bg-color: #f0f2f5; /* 背景稍微调深一点，突出卡片 */
+            --bg-color: #f0f2f5; 
             --card-bg: #ffffff;
-            --text-main: #222222; /* 字体颜色更深 */
+            --text-main: #222222; 
             --text-sec: #555555;
         }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
             padding: 20px;
             color: var(--text-main);
             line-height: 1.6;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
             background-color: var(--card-bg);
-            border-radius: 16px; /* 圆角更大一点 */
+            border-radius: 16px; 
             box-shadow: 0 8px 30px rgba(0,0,0,0.06);
             overflow: hidden;
             min-height: 500px;
             position: relative;
         }
-
-        /* --- 修改点 1：头图样式 --- */
         .header-image {
             width: 100%;
             height: auto;
+            max-height: 300px;
             display: block;
             background-color: #eee;
         }
-
         .header-content {
             padding: 25px 30px 10px;
             border-bottom: 1px solid #f0f0f0;
         }
-
         .date-tag {
             display: inline-block;
             background-color: var(--primary-color);
@@ -56,59 +51,39 @@
             font-weight: bold;
             margin-bottom: 12px;
         }
-
         .main-title {
             margin: 0;
             font-size: 2rem;
             color: #1a1a1a;
             letter-spacing: -0.5px;
         }
-
-        /* 播放器 */
         .audio-player {
             margin: 20px 30px;
             background: #f9f9f9;
             border-radius: 12px;
             padding: 10px;
         }
-        audio {
-            width: 100%;
-            height: 40px;
-        }
-
-        /* 新闻列表 */
-        .news-list {
-            padding: 0 30px 30px;
-            list-style: none;
-            margin: 0;
-        }
-
-        /* --- 修改点 2：正文列表样式 --- */
+        audio { width: 100%; height: 40px; }
+        .news-list { padding: 0 30px 30px; list-style: none; margin: 0; }
         .news-item {
             padding: 18px 0;
-            border-bottom: 1px solid #f0f0f0; /* 线条更淡更细 */
-            font-size: 1.25rem; /* 增大字体 */
-            line-height: 1.75;  /* 增加行高 */
+            border-bottom: 1px solid #f0f0f0; 
+            font-size: 1.25rem; 
+            line-height: 1.75;  
             color: var(--text-main);
             display: flex;
             align-items: flex-start;
-            text-align: justify; /* 两端对齐，排版更整齐 */
+            text-align: justify; 
         }
-
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
+        .news-item:last-child { border-bottom: none; }
         .news-index {
             font-weight: 800;
             color: var(--primary-color);
             margin-right: 12px;
             min-width: 28px;
-            font-size: 1.3rem; /* 序号稍微大一点 */
+            font-size: 1.3rem; 
             line-height: 1.75;
         }
-
-        /* 微语 */
         .weiyu-section {
             background-color: #fff1f0;
             border-left: 6px solid var(--primary-color);
@@ -117,14 +92,12 @@
             border-radius: 8px;
         }
         .weiyu-text {
-            font-size: 1.2rem; /* 微语字体也加大 */
+            font-size: 1.2rem; 
             font-style: italic;
             color: #444;
             margin: 0;
             font-weight: 500;
         }
-
-        /* 底部长图 */
         .full-image-container {
             padding: 20px 30px 40px;
             text-align: center;
@@ -142,10 +115,7 @@
             font-weight: bold;
             transition: all 0.2s;
         }
-        .full-image-btn:hover {
-            background: var(--primary-color);
-            color: white;
-        }
+        .full-image-btn:hover { background: var(--primary-color); color: white; }
         .full-image {
             width: 100%;
             margin-top: 20px;
@@ -153,7 +123,6 @@
             display: none; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
         #loading, .error-msg {
             text-align: center;
             padding: 60px 20px;
@@ -161,26 +130,34 @@
             font-size: 1.2rem;
         }
         .error-msg { color: #d93025; }
+        
+        /* 状态提示小标 */
+        .status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #999;
+            background: rgba(255,255,255,0.8);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
 
-        /* 手机端适配 */
         @media (max-width: 600px) {
             body { padding: 0; background-color: #fff; }
-            .container { 
-                box-shadow: none; 
-                border-radius: 0; 
-            }
-            .header-image { height: 180px; } /* 手机上头图稍矮一点 */
-            .news-item { 
-                font-size: 1.15rem; /* 手机上字体稍小一点，但依然比之前大 */
-                padding: 15px 0; 
-            }
+            .container { box-shadow: none; border-radius: 0; }
+            .header-image { max-height: 250px; } 
+            .news-item { font-size: 1.15rem; padding: 15px 0; }
             .news-list, .header-content, .weiyu-section { padding-left: 20px; padding-right: 20px; }
+            .status-badge { top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <div id="status-display" class="status-badge" style="display:none;"></div>
+
         <div id="loading">
             正在加载今日早报...
         </div>
@@ -213,6 +190,7 @@
 
     <script>
         const API_ENDPOINT = '/api/zaobao'; 
+        const CACHE_KEY = 'zaobao_local_data';
 
         function toggleFullImage() {
             const img = document.getElementById('full-img');
@@ -220,28 +198,73 @@
         }
 
         window.onload = function() {
-            fetchNews();
+            initNews();
         };
 
-        async function fetchNews() {
+        async function initNews() {
             const loadingEl = document.getElementById('loading');
             const contentEl = document.getElementById('content');
+            const statusEl = document.getElementById('status-display');
 
+            // 1. 尝试从本地缓存加载
+            const cachedDataStr = localStorage.getItem(CACHE_KEY);
+            let hasRenderedCache = false;
+
+            if (cachedDataStr) {
+                try {
+                    const cachedData = JSON.parse(cachedDataStr);
+                    const today = new Date().toISOString().split('T')[0]; // 获取 YYYY-MM-DD
+                    
+                    // 如果缓存里的日期就是今天，直接渲染，不再请求（极致省流）
+                    // 如果不是今天，先渲染旧的（避免白屏），然后请求新的
+                    renderData(cachedData);
+                    hasRenderedCache = true;
+                    loadingEl.style.display = 'none';
+                    contentEl.style.display = 'block';
+
+                    if (cachedData.date === today) {
+                        console.log('Using local cache (Today)');
+                        statusEl.textContent = '已缓存';
+                        statusEl.style.display = 'block';
+                        return; // 结束，不请求网络
+                    } else {
+                        console.log('Cache is old, fetching new...');
+                        statusEl.textContent = '更新中...';
+                        statusEl.style.display = 'block';
+                    }
+
+                } catch (e) {
+                    console.error('Cache parse error', e);
+                    localStorage.removeItem(CACHE_KEY);
+                }
+            }
+
+            // 2. 发起网络请求 (如果没有缓存，或者缓存过期)
             try {
                 const response = await fetch(API_ENDPOINT);
                 const result = await response.json();
 
                 if (result.code === 200 || result.success === true) {
+                    // 更新 UI
                     renderData(result.data);
+                    
+                    // 存入缓存
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(result.data));
+                    
                     loadingEl.style.display = 'none';
                     contentEl.style.display = 'block';
+                    statusEl.style.display = 'none'; // 更新完成，隐藏状态
                 } else {
-                    loadingEl.innerHTML = `<div class="error-msg">请求失败: ${result.message || '后端服务异常'}</div>`;
+                    if (!hasRenderedCache) {
+                        loadingEl.innerHTML = `<div class="error-msg">请求失败: ${result.message}</div>`;
+                    }
                 }
 
             } catch (error) {
-                console.error('Error:', error);
-                loadingEl.innerHTML = `<div class="error-msg">网络错误或后端函数调用失败。<br>${error.message}</div>`;
+                console.error('Fetch error:', error);
+                if (!hasRenderedCache) {
+                    loadingEl.innerHTML = `<div class="error-msg">网络错误，请稍后重试</div>`;
+                }
             }
         }
 
@@ -261,9 +284,13 @@
             // 3. 音频
             const audioBox = document.getElementById('audio-box');
             const audioCtrl = document.getElementById('audio-control');
+            // 注意：重新渲染时，如果音频源没变，不要打断播放
+            const currentSrc = audioCtrl.getAttribute('src');
             if (data.audio) {
                 audioBox.style.display = 'block';
-                audioCtrl.src = data.audio;
+                if (currentSrc !== data.audio) {
+                    audioCtrl.src = data.audio;
+                }
             } else {
                 audioBox.style.display = 'none';
             }
@@ -279,9 +306,7 @@
                 data.news.forEach(itemStr => {
                     const li = document.createElement('li');
                     li.className = 'news-item';
-                    
                     const match = itemStr.match(/^(\d+、)(.*)/);
-                    
                     if (match) {
                         li.innerHTML = `<span class="news-index">${match[1]}</span><span>${match[2]}</span>`;
                     } else {
