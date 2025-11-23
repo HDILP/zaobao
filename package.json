@@ -1,0 +1,12 @@
+{
+  "name": "vercel-zaobao-project",
+  "version": "1.0.0",
+  "description": "Daily News fetch via Vercel Serverless Function",
+  "main": "api/zaobao.js",
+  "scripts": {
+    "start": "echo 'Run locally using Vercel CLI'"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
