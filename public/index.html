@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日早报 - Daily News (Vercel Secure)</title>
+    <style>
+        :root {
+            --primary-color: #d93025; /* 新闻红 */
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sec: #666666;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            min-height: 500px;
+            position: relative;
+        }
+
+        /* Token 输入层 */
+        #token-modal  { display: none; } 
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .modal-content button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* 头部 */
+        .header-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            min-height: 100px;
+            background-color: #eee;
+        }
+
+        .header-content {
+            padding: 20px 25px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .date-tag {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #1a1a1a;
+        }
+
+        /* 播放器 */
+        .audio-player {
+            margin: 20px 25px;
+            background: #f9f9f9;
+            border-radius: 50px;
+            padding: 5px;
+        }
+        audio {
+            width: 100%;
+            height: 40px;
+        }
+
+        /* 新闻列表 */
+        .news-list {
+            padding: 0 25px 20px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .news-item {
+            padding: 15px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 处理序号样式 */
+        .news-index {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 10px;
+            min-width: 25px;
+        }
+
+        /* 微语 */
+        .weiyu-section {
+            background-color: #fff8f8;
+            border-left: 5px solid var(--primary-color);
+            margin: 20px 25px;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .weiyu-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: #555;
+            margin: 0;
+        }
+
+        /* 底部长图 */
+        .full-image-container {
+            padding: 20px 25px;
+            text-align: center;
+        }
+        .full-image-btn {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .full-image {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 8px;
+            display: none; /* 默认隐藏，点击按钮显示 */
+        }
+
+        /* 加载状态 */
+        #loading {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+            font-size: 1.2rem;
+        }
+        
+        .error-msg {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .main-title { font-size: 1.5rem; }
+            .news-item { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading">
+            正在获取今日早报... (通过 Vercel Serverless Function)
+        </div>
+        
+        <div id="content" style="display: none;">
+            <img id="head-img" class="header-image" src="" alt="Header">
+            <div class="header-content">
+                <span id="date-display" class="date-tag"></span>
+                <h1 class="main-title">每日早报精选</h1>
+            </div>
+            <div class="audio-player" id="audio-box" style="display: none;">
+                <audio id="audio-control" controls></audio>
+            </div>
+            <div class="weiyu-section">
+                <p id="weiyu-text" class="weiyu-text"></p>
+            </div>
+            <ul id="news-list" class="news-list">
+                </ul>
+            <div class="full-image-container">
+                <button class="full-image-btn" onclick="toggleFullImage()">查看/隐藏 分享长图</button>
+                <img id="full-img" class="full-image" src="" alt="Full Daily News">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 现在，客户端调用的是 Vercel 提供的 Serverless Function 路径
+        const API_ENDPOINT = '/api/zaobao'; 
+
+        // 切换长图显示
+        function toggleFullImage() {
+            const img = document.getElementById('full-img');
+            img.style.display = (img.style.display === 'none' || img.style.display === '') ? 'block' : 'none';
+        }
+
+        // 获取数据 (无需 Token)
+        window.onload = function() {
+            fetchNews();
+        };
+
+        async function fetchNews() {
+            const loadingEl = document.getElementById('loading');
+            const contentEl = document.getElementById('content');
+
+            try {
+                // 直接调用 Vercel 部署的 Serverless Function
+                const response = await fetch(API_ENDPOINT);
+                const result = await response.json();
+
+                if (result.code === 200 || result.success === true) {
+                    renderData(result.data);
+                    loadingEl.style.display = 'none';
+                    contentEl.style.display = 'block';
+                } else {
+                    loadingEl.innerHTML = `<div class="error-msg">请求失败: ${result.message || '后端服务异常'}</div>`;
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingEl.innerHTML = `<div class="error-msg">网络错误或后端函数调用失败。<br>${error.message}</div>`;
+            }
+        }
+
+        // 渲染页面 (与前一个回答的逻辑相同)
+        function renderData(data) {
+            // 1. 头部图片
+            const headImg = document.getElementById('head-img');
+            if (data.head_image) {
+                headImg.src = data.head_image;
+                headImg.style.display = 'block';
+            } else {
+                headImg.style.display = 'none';
+            }
+
+            // 2. 日期
+            document.getElementById('date-display').textContent = data.date;
+
+            // 3. 音频
+            const audioBox = document.getElementById('audio-box');
+            const audioCtrl = document.getElementById('audio-control');
+            if (data.audio) {
+                audioBox.style.display = 'block';
+                audioCtrl.src = data.audio;
+            } else {
+                audioBox.style.display = 'none';
+            }
+
+            // 4. 微语
+            document.getElementById('weiyu-text').textContent = data.weiyu || "新的一天，加油！";
+
+            // 5. 新闻列表
+            const newsList = document.getElementById('news-list');
+            newsList.innerHTML = '';
+            
+            if (data.news && Array.isArray(data.news)) {
+                data.news.forEach(itemStr => {
+                    const li = document.createElement('li');
+                    li.className = 'news-item';
+                    
+                    const match = itemStr.match(/^(\d+、)(.*)/);
+                    
+                    if (match) {
+                        li.innerHTML = `<span class="news-index">${match[1]}</span><span>${match[2]}</span>`;
+                    } else {
+                        li.innerHTML = `<span>${itemStr}</span>`;
+                    }
+                    newsList.appendChild(li);
+                });
+            }
+
+            // 6. 长图
+            if (data.image) {
+                document.getElementById('full-img').src = data.image;
+            }
+        }
+    </script>
+</body>
+</html>
