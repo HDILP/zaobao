@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>每日早报 - Daily News (Vercel Secure)</title>
+    <title>每日早报 - Daily News</title>
     <style>
         :root {
-            --primary-color: #d93025; /* 新闻红 */
-            --bg-color: #f5f5f5;
+            --primary-color: #d93025;
+            --bg-color: #f0f2f5; /* 背景稍微调深一点，突出卡片 */
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sec: #666666;
+            --text-main: #222222; /* 字体颜色更深 */
+            --text-sec: #555555;
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             background-color: var(--bg-color);
             margin: 0;
             padding: 20px;
@@ -26,52 +26,25 @@
             max-width: 800px;
             margin: 0 auto;
             background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 16px; /* 圆角更大一点 */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
             overflow: hidden;
             min-height: 500px;
             position: relative;
         }
 
-        /* Token 输入层 */
-        #token-modal  { display: none; } 
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .modal-content input {
-            width: 80%;
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-        .modal-content button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* 头部 */
+        /* --- 修改点 1：头图样式 --- */
         .header-image {
             width: 100%;
-            height: auto;
+            height: 220px; /* 固定高度，不再无限拉伸 */
+            object-fit: cover; /* 保持比例裁剪，不变形 */
             display: block;
-            min-height: 100px;
             background-color: #eee;
         }
 
         .header-content {
-            padding: 20px 25px 10px;
-            border-bottom: 1px solid #eee;
+            padding: 25px 30px 10px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .date-tag {
@@ -79,24 +52,25 @@
             background-color: var(--primary-color);
             color: white;
             padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .main-title {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #1a1a1a;
+            letter-spacing: -0.5px;
         }
 
         /* 播放器 */
         .audio-player {
-            margin: 20px 25px;
+            margin: 20px 30px;
             background: #f9f9f9;
-            border-radius: 50px;
-            padding: 5px;
+            border-radius: 12px;
+            padding: 10px;
         }
         audio {
             width: 100%;
@@ -105,127 +79,147 @@
 
         /* 新闻列表 */
         .news-list {
-            padding: 0 25px 20px;
+            padding: 0 30px 30px;
             list-style: none;
             margin: 0;
         }
 
+        /* --- 修改点 2：正文列表样式 --- */
         .news-item {
-            padding: 15px 0;
-            border-bottom: 1px dashed #eee;
-            font-size: 1.05rem;
+            padding: 18px 0;
+            border-bottom: 1px solid #f0f0f0; /* 线条更淡更细 */
+            font-size: 1.25rem; /* 增大字体 */
+            line-height: 1.75;  /* 增加行高 */
+            color: var(--text-main);
             display: flex;
             align-items: flex-start;
+            text-align: justify; /* 两端对齐，排版更整齐 */
         }
 
         .news-item:last-child {
             border-bottom: none;
         }
 
-        /* 处理序号样式 */
         .news-index {
-            font-weight: bold;
+            font-weight: 800;
             color: var(--primary-color);
-            margin-right: 10px;
-            min-width: 25px;
+            margin-right: 12px;
+            min-width: 28px;
+            font-size: 1.3rem; /* 序号稍微大一点 */
+            line-height: 1.75;
         }
 
         /* 微语 */
         .weiyu-section {
-            background-color: #fff8f8;
-            border-left: 5px solid var(--primary-color);
-            margin: 20px 25px;
+            background-color: #fff1f0;
+            border-left: 6px solid var(--primary-color);
+            margin: 20px 30px;
             padding: 20px;
-            border-radius: 4px;
+            border-radius: 8px;
         }
         .weiyu-text {
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* 微语字体也加大 */
             font-style: italic;
-            color: #555;
+            color: #444;
             margin: 0;
+            font-weight: 500;
         }
 
         /* 底部长图 */
         .full-image-container {
-            padding: 20px 25px;
+            padding: 20px 30px 40px;
             text-align: center;
+            background: #fafafa;
+            border-top: 1px solid #eee;
         }
         .full-image-btn {
-            background: transparent;
+            background: white;
             color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 6px;
+            border: 2px solid var(--primary-color);
+            padding: 12px 24px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .full-image-btn:hover {
+            background: var(--primary-color);
+            color: white;
         }
         .full-image {
             width: 100%;
-            margin-top: 15px;
+            margin-top: 20px;
             border-radius: 8px;
-            display: none; /* 默认隐藏，点击按钮显示 */
+            display: none; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* 加载状态 */
-        #loading {
+        #loading, .error-msg {
             text-align: center;
-            padding: 50px;
-            color: #999;
+            padding: 60px 20px;
+            color: #888;
             font-size: 1.2rem;
         }
-        
-        .error-msg {
-            color: red;
-            text-align: center;
-            padding: 20px;
-        }
+        .error-msg { color: #d93025; }
 
-        /* 响应式 */
+        /* 手机端适配 */
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .main-title { font-size: 1.5rem; }
-            .news-item { font-size: 1rem; }
+            body { padding: 0; background-color: #fff; }
+            .container { 
+                box-shadow: none; 
+                border-radius: 0; 
+            }
+            .header-image { height: 180px; } /* 手机上头图稍矮一点 */
+            .news-item { 
+                font-size: 1.15rem; /* 手机上字体稍小一点，但依然比之前大 */
+                padding: 15px 0; 
+            }
+            .news-list, .header-content, .weiyu-section { padding-left: 20px; padding-right: 20px; }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
         <div id="loading">
-            正在获取今日早报... (通过 Vercel Serverless Function)
+            正在加载今日早报...
         </div>
         
         <div id="content" style="display: none;">
             <img id="head-img" class="header-image" src="" alt="Header">
+            
             <div class="header-content">
                 <span id="date-display" class="date-tag"></span>
-                <h1 class="main-title">每日早报精选</h1>
+                <h1 class="main-title">每日早报</h1>
             </div>
+
             <div class="audio-player" id="audio-box" style="display: none;">
                 <audio id="audio-control" controls></audio>
             </div>
+
             <div class="weiyu-section">
                 <p id="weiyu-text" class="weiyu-text"></p>
             </div>
+
             <ul id="news-list" class="news-list">
                 </ul>
+
             <div class="full-image-container">
-                <button class="full-image-btn" onclick="toggleFullImage()">查看/隐藏 分享长图</button>
+                <button class="full-image-btn" onclick="toggleFullImage()">查看分享长图</button>
                 <img id="full-img" class="full-image" src="" alt="Full Daily News">
             </div>
         </div>
     </div>
 
     <script>
-        // 现在，客户端调用的是 Vercel 提供的 Serverless Function 路径
         const API_ENDPOINT = '/api/zaobao'; 
 
-        // 切换长图显示
         function toggleFullImage() {
             const img = document.getElementById('full-img');
             img.style.display = (img.style.display === 'none' || img.style.display === '') ? 'block' : 'none';
         }
 
-        // 获取数据 (无需 Token)
         window.onload = function() {
             fetchNews();
         };
@@ -235,7 +229,6 @@
             const contentEl = document.getElementById('content');
 
             try {
-                // 直接调用 Vercel 部署的 Serverless Function
                 const response = await fetch(API_ENDPOINT);
                 const result = await response.json();
 
@@ -253,7 +246,6 @@
             }
         }
 
-        // 渲染页面 (与前一个回答的逻辑相同)
         function renderData(data) {
             // 1. 头部图片
             const headImg = document.getElementById('head-img');
