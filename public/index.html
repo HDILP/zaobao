@@ -325,63 +325,60 @@
             z-index: 10;
         }
         
-        @media (max-width: 600px) {
+         @media (max-width: 600px) {
             body { 
                 padding: 0; 
-                /* 保持背景不变，让卡片浮于其上 */
                 background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+                /* 防止左右滑动出现空白 */
+                overflow-x: hidden;
             }
-            
-            /* 重点修改：保留卡片样式 */
+
             .container { 
-                /* 撤销：将阴影重新添加或保留 */
-                box-shadow: var(--shadow-soft); 
+                /* 核心修复：只使用 margin 来居中 */
+                margin: 20px auto; 
                 
-                /* 撤销：将圆角重新添加或保留 */
-                border-radius: 24px; 
+                /* 设定宽度，并留出一点边距 */
+                width: 92%;
+                max-width: 92%;
+
+                /* 确保移除之前的偏移定位 */
+                left: auto;
+                transform: none;
                 
-                /* 修改：添加一些垂直外边距，让卡片与屏幕顶部和底部有间隔 */
-                margin: 15px auto; 
-                
-                /* 修改：限制最大宽度，但允许在小屏幕上占满大部分空间 */
-                max-width: 95%;
-                
-                /* 保持：背景色 */
+                /* 保持背景和其他样式 */
                 background: var(--card-bg); 
-                
-                /* 确保它在小屏幕上居中 */
-                left: 50%;
-                transform: translateX(-50%);
-                position: relative; /* 确保它能响应 margin: auto */
-                
-                /* 移除 min-height 可能会更好，让内容决定高度 */
-                min-height: auto; 
+                box-shadow: var(--shadow-soft); 
+                border-radius: 20px; 
+                position: relative;
             }
-            
-            /* 其他小屏幕优化（保持不变或根据您的需求调整）*/
+
+            /* 保持 hover 效果在手机上不要乱跳，通常手机上可以取消位移效果 */
+            .container:hover {
+                transform: none;
+            }
+
             .news-list, .header-content, .weiyu-section, .audio-player, .full-image-container { 
-                padding-left: 15px; /* 减小内边距 */
-                padding-right: 15px; /* 减小内边距 */
+                padding-left: 20px; 
+                padding-right: 20px; 
             }
-            
+
             .news-item { 
-                font-size: 1.1rem; /* 适当减小字体 */
+                font-size: 1.1rem; 
             }
-        
-            /* 保证标题不会太大 */
+
             .main-title {
                 font-size: 1.8rem;
             }
-            
-            /* 保证卡片内的内边距不会太小 */
+
             .header-content {
-                padding: 20px 15px 10px;
+                padding: 25px 20px 15px;
             }
-        
+
             .audio-player, .weiyu-section {
-                margin: 15px 15px;
+                margin: 20px;
             }
         }
+
         
     </style>
 </head>
